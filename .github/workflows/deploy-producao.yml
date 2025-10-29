@@ -1,0 +1,25 @@
+name: 🌟 Deploy para Producao
+
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+      
+jobs:
+  deploy_producao:
+    if: github.event.pull_request.merged == true
+    name: Publicar em Producao
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🔎 Checkout do Codigo
+        uses: actions/checkout@v4
+
+      - name: 🚀 DEPLOY - Producao
+        run: |
+          echo "================================================="
+          echo "  DEPLOY PARA PRODUÇÃO (Branch: main)  "
+          echo "================================================="
+          echo "Novo código da branch Develop mesclado e publicado em PRODUÇÃO!"
+          echo "Versão do Commit: ${{ github.sha }}"

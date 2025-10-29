@@ -1,0 +1,27 @@
+name: 🧪 Deploy para Homolog
+
+on:
+  push:
+    branches:
+      - develop
+  
+  workflow_dispatch:
+
+jobs:
+  build_e_deploy_homolog:
+    # Nome do Job
+    name: Publicar em Homolog
+    # Máquina onde roda
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🔎 Checkout do Codigo
+        uses: actions/checkout@v4
+        
+      - name: 🚀 DEPLOY - Homologacao
+        run: |
+          echo "================================================="
+          echo "  DEPLOY PARA HOMOLOGAÇÃO (Branch: develop)  "
+          echo "================================================="
+          echo "Projeto publicado com sucesso no ambiente de HOMOLOG!"
+          echo "Versão do Commit: ${{ github.sha }}"
