@@ -1,13 +1,10 @@
 name: 🧪 Deploy para Homolog
 
-# Este workflow é acionado em dois momentos:
 on:
-  # 1. Quando há um push (envio de código) APENAS na branch 'develop'
   push:
     branches:
       - develop
   
-  # 2. Permite acionamento manual (opcional, mas bom para demo)
   workflow_dispatch:
 
 jobs:
@@ -21,7 +18,6 @@ jobs:
       - name: 🔎 Checkout do Codigo
         uses: actions/checkout@v4
         
-      # Substitua este ECHO pelo seu comando de Build/Deploy real
       - name: 🚀 DEPLOY - Homologacao
         run: |
           echo "================================================="
