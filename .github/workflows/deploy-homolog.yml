@@ -27,6 +27,9 @@ jobs:
           RD_USER: ${{ secrets.RD_USER }}
           RD_PASSWORD: ${{ secrets.RD_PASSWORD }}
         run: |
+          echo "RD_URL: $RD_URL"
+          echo "RD_USER: $RD_USER"
+          
           for job_file in jobs/*.yaml jobs/*.yml; do
             if [ -f "$job_file" ]; then
               echo "Deploy: $job_file"
