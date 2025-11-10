@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - develop
+  
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -28,10 +30,6 @@ jobs:
           for job_file in jobs/*.yaml jobs/*.yml; do
             if [ -f "$job_file" ]; then
               echo "Deploy: $job_file"
-              java -jar rundeck-cli-2.0.8-all.jar \
-                --url="$RD_URL" \
-                --username="$RD_USER" \
-                --password="$RD_PASSWORD" \
-                jobs load -f "$job_file" -p homolog --duplicate update
+              java -jar rundeck-cli-2.0.8-all.jar jobs load -f "$job_file" -p homolog --duplicate update
             fi
           done
