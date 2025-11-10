@@ -29,7 +29,10 @@ jobs:
           echo "RD_USER: $RD_USER"
           
           # Verificar conectividade
-          curl -I "$RD_URL" || echo "Falha na conectividade com $RD_URL"
+          if ! curl -I --connect-timeout 10 --max-time 15 "$RD_URL"; then
+            echo "❌ Servidor Rundeck inacessível: $RD_URL"
+            exit 1
+          fi
           
           for job_file in jobs/*.yaml jobs/*.yml; do
             if [ -f "$job_file" ]; then
