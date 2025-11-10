@@ -9,19 +9,25 @@ on:
 
 jobs:
   build_e_deploy_homolog:
-    # Nome do Job
     name: Publicar em Homolog
-    # Máquina onde roda
     runs-on: ubuntu-latest
+    container: rundeck/cli:latest
+    environment: homolog
+    
+    env:
+      RD_URL: ${{ vars.RUNDECK_SERVER }}
+      RD_USER: ${{ secrets.RUNDECK_USER }}
+      RD_PASSWORD: ${{ secrets.RUNDECK_PASSWORD }}
     
     steps:
       - name: 🔎 Checkout do Codigo
         uses: actions/checkout@v4
-        
-      - name: 🚀 DEPLOY - Homologacao
+          
+      - name: 🚀 Deploy Jobs para Rundeck
         run: |
-          echo "================================================="
-          echo "  DEPLOY PARA HOMOLOGAÇÃO (Branch: develop)  "
-          echo "================================================="
-          echo "Projeto publicado com sucesso no ambiente de HOMOLOG!"
-          echo "Versão do Commit: ${{ github.sha }}"
+          for job_file in jobs/*.yaml jobs/*.yml; do
+            if [ -f "$job_file" ]; then
+              echo "Deploy: $job_file"
+              rd jobs load -f "$job_file" -p homolog --duplicate update
+            fi
+          done

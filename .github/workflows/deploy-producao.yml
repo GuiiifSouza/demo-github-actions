@@ -1,25 +1,30 @@
 name: 🌟 Deploy para Producao
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - master
       
 jobs:
   deploy_producao:
-    if: github.event.pull_request.merged == true
     name: Publicar em Producao
     runs-on: ubuntu-latest
+    container: rundeck/cli:latest
+    
+    env:
+      RD_URL: ${{ vars.RUNDECK_SERVER }}
+      RD_USER: ${{ secrets.RUNDECK_USER }}
+      RD_PASSWORD: ${{ secrets.RUNDECK_PASSWORD }}
     
     steps:
       - name: 🔎 Checkout do Codigo
         uses: actions/checkout@v4
 
-      - name: 🚀 DEPLOY - Producao
+      - name: 🚀 Deploy Jobs para Rundeck
         run: |
-          echo "================================================="
-          echo "  DEPLOY PARA PRODUÇÃO (Branch: main)  "
-          echo "================================================="
-          echo "Novo código da branch Develop mesclado e publicado em PRODUÇÃO!"
-          echo "Versão do Commit: ${{ github.sha }}"
+          for job_file in jobs/*.yaml jobs/*.yml; do
+            if [ -f "$job_file" ]; then
+              echo "Deploy: $job_file"
+              rd jobs load -f "$job_file" -p production --duplicate update
+            fi
+          done
