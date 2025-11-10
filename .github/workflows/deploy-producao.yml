@@ -22,8 +22,8 @@ jobs:
       - name: 🚀 Deploy Jobs para Rundeck
         env:
           RD_URL: ${{ vars.RD_URL }}
-          RD_USER: ${{ secrets.RUNDECK_USER }}
-          RD_PASSWORD: ${{ secrets.RUNDECK_PASSWORD }}
+          RD_USER: ${{ secrets.RD_USER }}
+          RD_PASSWORD: ${{ secrets.RD_PASSWORD }}
         run: |
           for job_file in jobs/*.yaml jobs/*.yml; do
             if [ -f "$job_file" ]; then
