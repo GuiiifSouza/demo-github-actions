@@ -4,11 +4,9 @@ on:
   push:
     branches:
       - develop
-  
-  workflow_dispatch:
 
 jobs:
-  build_e_deploy_homolog:
+  deploy_homolog:
     name: Publicar em Homolog
     runs-on: ubuntu-latest
     environment: homolog
