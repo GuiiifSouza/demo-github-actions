@@ -17,9 +17,14 @@ jobs:
       - name: 🔎 Checkout do Codigo
         uses: actions/checkout@v4
         
-      - name: 📦 Instalar Rundeck CLI
+      - name: 🔑 Configurar SSH Key
         run: |
-          wget -q https://github.com/rundeck/rundeck-cli/releases/download/v2.0.8/rundeck-cli-2.0.8-all.jar
+          echo "${{ secrets.KEY_DEPLOYER }}" > /tmp/deployer.pem
+          chmod 600 /tmp/deployer.pem
+          
+      - name: 📦 Copiar arquivos para VM
+        run: |
+          scp -i /tmp/deployer.pem -o StrictHostKeyChecking=no jobs/*.yaml jobs/*.yml ${{ secrets.VM_DEPLOYER }}:/tmp/
           
       - name: 🚀 Deploy Jobs para Rundeck
         env:
@@ -27,12 +32,18 @@ jobs:
           RD_USER: ${{ secrets.RD_USER }}
           RD_PASSWORD: ${{ secrets.RD_PASSWORD }}
         run: |
-          echo "RD_URL: $RD_URL"
-          echo "RD_USER: $RD_USER"
-          
-          for job_file in jobs/*.yaml jobs/*.yml; do
-            if [ -f "$job_file" ]; then
-              echo "Deploy: $job_file"
-              java -jar rundeck-cli-2.0.8-all.jar jobs load -f "$job_file" -p homolog --duplicate update
-            fi
-          done
+          ssh -i /tmp/deployer.pem -o StrictHostKeyChecking=no ${{ secrets.VM_DEPLOYER }} << 'EOF'
+            cd /tmp
+            wget -q https://github.com/rundeck/rundeck-cli/releases/download/v2.0.8/rundeck-cli-2.0.8-all.jar
+            
+            export RD_URL="${{ secrets.RD_URL }}"
+            export RD_USER="${{ secrets.RD_USER }}"
+            export RD_PASSWORD="${{ secrets.RD_PASSWORD }}"
+            
+            for job_file in *.yaml *.yml; do
+              if [ -f "$job_file" ]; then
+                echo "Deploy: $job_file"
+                java -jar rundeck-cli-2.0.8-all.jar jobs load -f "$job_file" -p homolog --duplicate update
+              fi
+            done
+          EOF
