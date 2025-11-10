@@ -30,6 +30,6 @@ jobs:
           for job_file in jobs/*.yaml jobs/*.yml; do
             if [ -f "$job_file" ]; then
               echo "Deploy: $job_file"
-              java -jar rundeck-cli-2.0.8-all.jar jobs load -f "$job_file" -p homolog --duplicate update
+              java -jar rundeck-cli-2.0.8-all.jar jobs load -f "$job_file" -p homolog --duplicate update --format yaml
             fi
           done
