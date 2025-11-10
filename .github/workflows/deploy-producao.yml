@@ -21,7 +21,7 @@ jobs:
 
       - name: 🚀 Deploy Jobs para Rundeck
         env:
-          RD_URL: ${{ vars.RD_URL }}
+          RD_URL: ${{ secrets.RD_URL }}
           RD_USER: ${{ secrets.RD_USER }}
           RD_PASSWORD: ${{ secrets.RD_PASSWORD }}
         run: |
