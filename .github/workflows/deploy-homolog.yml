@@ -8,15 +8,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_e_deploy_homolog:
-    name: Publicar em Homolog
+  deploy:
+    name: Deploy Jobs para Rundeck
     runs-on: ubuntu-latest
     environment: homolog
-    
-    env:
-      RD_URL: ${{ vars.RUNDECK_SERVER }}
-      RD_USER: ${{ secrets.RUNDECK_USER }}
-      RD_PASSWORD: ${{ secrets.RUNDECK_PASSWORD }}
     
     steps:
       - name: 🔎 Checkout do Codigo
@@ -27,10 +22,18 @@ jobs:
           wget -q https://github.com/rundeck/rundeck-cli/releases/download/v2.0.8/rundeck-cli-2.0.8-all.jar
           
       - name: 🚀 Deploy Jobs para Rundeck
+        env:
+          RD_URL: ${{ vars.RUNDECK_SERVER }}
+          RD_USER: ${{ secrets.RUNDECK_USER }}
+          RD_PASSWORD: ${{ secrets.RUNDECK_PASSWORD }}
         run: |
           for job_file in jobs/*.yaml jobs/*.yml; do
             if [ -f "$job_file" ]; then
               echo "Deploy: $job_file"
-              java -jar rundeck-cli-2.0.8-all.jar jobs load -f "$job_file" -p homolog --duplicate update
+              java -jar rundeck-cli-2.0.8-all.jar \
+                --url="$RD_URL" \
+                --username="$RD_USER" \
+                --password="$RD_PASSWORD" \
+                jobs load -f "$job_file" -p homolog --duplicate update
             fi
           done
