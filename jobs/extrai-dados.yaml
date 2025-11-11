@@ -3,7 +3,7 @@
   executionEnabled: true
   id: 43c98e00-8ffc-43ac-aba0-2383028b2f30
   loglevel: INFO
-  name: hello-job
+  name: extrair-dados-job
   nodeFilterEditable: false
   plugins:
     ExecutionLifecycle: {}
