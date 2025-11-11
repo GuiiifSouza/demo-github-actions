@@ -8,20 +8,28 @@ on:
   workflow_dispatch:
 
 jobs:
-  build_e_deploy_homolog:
-    # Nome do Job
-    name: Publicar em Homolog
-    # Máquina onde roda
+  deploy:
+    name: Deploy Jobs para Rundeck
     runs-on: ubuntu-latest
+    environment: homolog
     
     steps:
       - name: 🔎 Checkout do Codigo
         uses: actions/checkout@v4
         
-      - name: 🚀 DEPLOY - Homologacao
+      - name: 📦 Instalar Rundeck CLI
         run: |
-          echo "================================================="
-          echo "  DEPLOY PARA HOMOLOGAÇÃO (Branch: develop)  "
-          echo "================================================="
-          echo "Projeto publicado com sucesso no ambiente de HOMOLOG!"
-          echo "Versão do Commit: ${{ github.sha }}"
+          wget -q https://github.com/rundeck/rundeck-cli/releases/download/v2.0.8/rundeck-cli-2.0.8-all.jar
+          
+      - name: 🚀 Deploy Jobs para Rundeck
+        env:
+          RD_URL: ${{ secrets.RD_URL }}
+          RD_USER: ${{ secrets.RD_USER }}
+          RD_PASSWORD: ${{ secrets.RD_PASSWORD }}
+        run: |
+          for job_file in jobs/*.yaml jobs/*.yml; do
+            if [ -f "$job_file" ]; then
+              echo "Deploy: $job_file"
+              java -jar rundeck-cli-2.0.8-all.jar jobs load -f "$job_file" -p homolog --duplicate update --format yaml
+            fi
+          done

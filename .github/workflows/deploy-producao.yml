@@ -1,25 +1,33 @@
 name: 🌟 Deploy para Producao
 
 on:
-  pull_request:
-    types: [closed]
+  push:
     branches:
       - master
       
 jobs:
-  deploy_producao:
-    if: github.event.pull_request.merged == true
-    name: Publicar em Producao
+  deploy:
+    name: Deploy Jobs para Rundeck
     runs-on: ubuntu-latest
+    environment: production
     
     steps:
       - name: 🔎 Checkout do Codigo
         uses: actions/checkout@v4
-
-      - name: 🚀 DEPLOY - Producao
+        
+      - name: 📦 Instalar Rundeck CLI
         run: |
-          echo "================================================="
-          echo "  DEPLOY PARA PRODUÇÃO (Branch: main)  "
-          echo "================================================="
-          echo "Novo código da branch Develop mesclado e publicado em PRODUÇÃO!"
-          echo "Versão do Commit: ${{ github.sha }}"
+          wget -q https://github.com/rundeck/rundeck-cli/releases/download/v2.0.8/rundeck-cli-2.0.8-all.jar
+
+      - name: 🚀 Deploy Jobs para Rundeck
+        env:
+          RD_URL: ${{ secrets.RD_URL }}
+          RD_USER: ${{ secrets.RD_USER }}
+          RD_PASSWORD: ${{ secrets.RD_PASSWORD }}
+        run: |
+          for job_file in jobs/*.yaml jobs/*.yml; do
+            if [ -f "$job_file" ]; then
+              echo "Deploy: $job_file"
+              java -jar rundeck-cli-2.0.8-all.jar jobs load -f "$job_file" -p production --duplicate update --format yaml
+            fi
+          done
