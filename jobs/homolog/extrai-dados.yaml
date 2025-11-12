@@ -1,0 +1,17 @@
+- defaultTab: nodes
+  description: 'Example Dados extraidos'
+  executionEnabled: true
+  id: 35517687-17de-41f5-a90b-9e71d329f3f1
+  loglevel: INFO
+  name: Example Dados extraidos Homolog
+  nodeFilterEditable: false
+  plugins:
+    ExecutionLifecycle: {}
+  scheduleEnabled: true
+  sequence:
+    commands:
+    - exec: echo "Dados extraidos Homolog"
+    keepgoing: false
+    strategy: node-first
+  user: admin
+  uuid: 35517687-17de-41f5-a90b-9e71d329f3f1
