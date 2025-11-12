@@ -24,7 +24,7 @@ jobs:
           RD_URL: ${{ secrets.RD_URL }}
           RD_USER: ${{ secrets.RD_USER }}
           RD_PASSWORD: ${{ secrets.RD_PASSWORD }}
-          RD_AUTH_TYPE: ${{ env.AUTH_TYPE }}
+          RD_AUTH_TYPE: password
         run: |
           EXTRA_OPTS=""
           if [ "${{ secrets.RD_INSECURE }}" = "true" ]; then EXTRA_OPTS="--insecure"; fi
