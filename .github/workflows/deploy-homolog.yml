@@ -26,11 +26,8 @@ jobs:
           RD_URL: ${{ secrets.RD_URL }}
           RD_USER: ${{ secrets.RD_USER }}
           RD_PASSWORD: ${{ secrets.RD_PASSWORD }}
-          RD_AUTH_TYPE: password
         run: |
-          EXTRA_OPTS=""
-          if [ "${{ secrets.RD_INSECURE }}" = "true" ]; then EXTRA_OPTS="--insecure"; fi
           find jobs/homolog -name "*.yaml" -o -name "*.yml" | while read job_file; do
             echo "Deploy: $job_file"
-            java -jar rundeck-cli-2.0.8-all.jar ${EXTRA_OPTS} jobs load -f "$job_file" -p homolog --duplicate update --format yaml
+            java -jar rundeck-cli-2.0.8-all.jar jobs load -f "$job_file" -p homolog --duplicate update --format yaml
           done
