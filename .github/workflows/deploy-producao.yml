@@ -30,10 +30,5 @@ jobs:
           if [ "${{ secrets.RD_INSECURE }}" = "true" ]; then EXTRA_OPTS="--insecure"; fi
           find jobs/production -name "*.yaml" -o -name "*.yml" | while read job_file; do
             echo "Deploy: $job_file"
-            java -jar rundeck-cli-2.0.8-all.jar ${EXTRA_OPTS} \
-              --url "$RD_URL" \
-              --user "$RD_USER" \
-              --password "$RD_PASSWORD" \
-              --auth-type password \
-              jobs load -f "$job_file" -p production --duplicate update --format yaml
+            java -jar rundeck-cli-2.0.8-all.jar ${EXTRA_OPTS} jobs load -f "$job_file" -p production --duplicate update --format yaml
           done
