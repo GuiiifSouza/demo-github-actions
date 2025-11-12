@@ -20,7 +20,7 @@ jobs:
       - name: 📦 Instalar Rundeck CLI
         run: |
           wget -q https://github.com/rundeck/rundeck-cli/releases/download/v2.0.8/rundeck-cli-2.0.8-all.jar
-          
+
       - name: 🚀 Deploy Jobs para Rundeck
         env:
           RD_URL: ${{ secrets.RD_URL }}
