@@ -12,4 +12,5 @@ CREATE TABLE IF NOT EXISTS extrai_log (
   extrai_dados_id INT NOT NULL,
   mensagem VARCHAR(500) NOT NULL,
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  FOREIGN KEY (extrai_dados_id) REFERENCES extrai_dados(id)
 );
