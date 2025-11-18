@@ -8,26 +8,44 @@ on:
   workflow_dispatch:
 
 jobs:
-  deploy:
-    name: Deploy Jobs para Rundeck
+  # deploy:
+  #   name: Deploy Jobs para Rundeck
+  #   runs-on: ubuntu-latest
+  #   environment: homolog
+    
+  #   steps:
+  #     - name: 🔎 Checkout do Codigo
+  #       uses: actions/checkout@v4
+        
+  #     - name: 📦 Instalar Rundeck CLI
+  #       run: |
+  #         wget -q https://github.com/rundeck/rundeck-cli/releases/download/v2.0.8/rundeck-cli-2.0.8-all.jar
+
+  #     - name: 🚀 Deploy Jobs para Rundeck
+  #       env:
+  #         RD_URL: ${{ secrets.RD_URL }}
+  #         RD_USER: ${{ secrets.RD_USER }}
+  #         RD_PASSWORD: ${{ secrets.RD_PASSWORD }}
+  #       run: |
+  #         find jobs/homolog -name "*.yaml" -o -name "*.yml" | while read job_file; do
+  #           echo "Deploy: $job_file"
+  #           java -jar rundeck-cli-2.0.8-all.jar jobs load -f "$job_file" -p homolog --duplicate update --format yaml
+  #         done
+
+  db-migrate:
+    name: Atualizar banco via Liquibase
     runs-on: ubuntu-latest
     environment: homolog
-    
+
     steps:
       - name: 🔎 Checkout do Codigo
         uses: actions/checkout@v4
-        
-      - name: 📦 Instalar Rundeck CLI
-        run: |
-          wget -q https://github.com/rundeck/rundeck-cli/releases/download/v2.0.8/rundeck-cli-2.0.8-all.jar
 
-      - name: 🚀 Deploy Jobs para Rundeck
-        env:
-          RD_URL: ${{ secrets.RD_URL }}
-          RD_USER: ${{ secrets.RD_USER }}
-          RD_PASSWORD: ${{ secrets.RD_PASSWORD }}
-        run: |
-          find jobs/homolog -name "*.yaml" -o -name "*.yml" | while read job_file; do
-            echo "Deploy: $job_file"
-            java -jar rundeck-cli-2.0.8-all.jar jobs load -f "$job_file" -p homolog --duplicate update --format yaml
-          done
+      - name: 🚀 Atualizar database (Liquibase)
+        uses: liquibase/liquibase-github-action@v4.23.2
+        with:
+          operation: 'update'
+          changeLogFile: 'database/homolog/changelog.sql'
+          url: ${{ secrets.LIQUIBASE_URL }}
+          username: ${{ secrets.LIQUIBASE_USERNAME }}
+          password: ${{ secrets.LIQUIBASE_PASSWORD }}
