@@ -1,3 +1,4 @@
+--liquibase formatted sql
 
 --changeset demo-homolog:001-create-table-extrai-dados
 CREATE TABLE IF NOT EXISTS extrai_dados (
@@ -13,3 +14,9 @@ CREATE TABLE IF NOT EXISTS extrai_log (
   mensagem VARCHAR(500) NOT NULL,
   criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+--changeset demo-homolog:003-add-foreign-key-extrai-log
+ALTER TABLE extrai_log
+ADD CONSTRAINT fk_extrai_log_extrai_dados
+FOREIGN KEY (extrai_dados_id)
+REFERENCES extrai_dados(id);
