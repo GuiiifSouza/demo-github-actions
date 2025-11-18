@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 🚀 Atualizar database (Liquibase)
-        uses: liquibase/liquibase-github-action@v4.23.2
+        uses: liquibase/liquibase-github-action@v4
         with:
           operation: 'update'
           changeLogFile: 'database/production/changelog.sql'
