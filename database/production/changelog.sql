@@ -1,3 +1,4 @@
+--liquibase formatted sql
 
 --changeset demo-homolog:001-create-table-extrai-dados
 CREATE TABLE IF NOT EXISTS extrai_dados (
