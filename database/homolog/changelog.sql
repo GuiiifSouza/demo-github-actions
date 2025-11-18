@@ -20,3 +20,7 @@ ALTER TABLE extrai_log
 ADD CONSTRAINT fk_extrai_log_extrai_dados
 FOREIGN KEY (extrai_dados_id)
 REFERENCES extrai_dados(id);
+
+--changeset demo-homolog:004-create-index-extrai-log-dados-id
+CREATE INDEX IF NOT EXISTS idx_extrai_log_dados_id
+ON extrai_log (extrai_dados_id);
