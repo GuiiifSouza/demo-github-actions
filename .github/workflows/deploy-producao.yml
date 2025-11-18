@@ -38,6 +38,11 @@ jobs:
     steps:
       - name: 🔎 Checkout do Codigo
         uses: actions/checkout@v4
+      
+      - name: 📥 Baixar driver JDBC do Postgres
+        run: |
+          mkdir -p drivers
+          curl -L -o drivers/postgresql-42.7.3.jar https://jdbc.postgresql.org/download/postgresql-42.7.3.jar
 
       - name: 🚀 Atualizar database (Liquibase)
         uses: liquibase/liquibase-github-action@v4
