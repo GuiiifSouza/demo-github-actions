@@ -22,6 +22,5 @@ FOREIGN KEY (extrai_dados_id)
 REFERENCES extrai_dados(id);
 
 --changeset demo-homolog:004-add-column-descricao-ruim
--- Comentário: coluna com tamanho muito pequeno, alteração ruim de exemplo
 ALTER TABLE extrai_dados
 ADD COLUMN descricao VARCHAR(5);
