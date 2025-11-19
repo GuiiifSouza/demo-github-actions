@@ -53,3 +53,4 @@ jobs:
           username: ${{ secrets.LIQUIBASE_USERNAME }}
           password: ${{ secrets.LIQUIBASE_PASSWORD }}
           classpath: 'drivers/postgresql-42.7.3.jar'
+
