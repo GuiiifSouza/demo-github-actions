@@ -24,3 +24,8 @@ REFERENCES extrai_dados(id);
 --changeset demo-homolog:004-add-column-descricao-ruim
 ALTER TABLE extrai_dados
 ADD COLUMN descricao VARCHAR(5);
+
+--changeset demo-homolog:005-ajusta-tamanho-coluna-descricao
+-- Correção: aumenta o tamanho da coluna descricao para um valor mais adequado
+ALTER TABLE extrai_dados
+ALTER COLUMN descricao TYPE VARCHAR(255);
