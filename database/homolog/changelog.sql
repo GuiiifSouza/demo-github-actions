@@ -29,3 +29,7 @@ ADD COLUMN descricao VARCHAR(5);
 -- Correção: aumenta o tamanho da coluna descricao para um valor mais adequado
 ALTER TABLE extrai_dados
 ALTER COLUMN descricao TYPE VARCHAR(255);
+
+--changeset demo-homolog:006-create-index-extrai-log-extrai-dados-id
+CREATE INDEX idx_extrai_log_extrai_dados_id
+ON extrai_log (extrai_dados_id);
